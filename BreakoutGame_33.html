@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Breakout Game</title>
 <script type="text/javascript" src="jquery.js"></script>
-<script>
+<script >
 	$(function() {
 		// coding here
 
@@ -14,10 +14,11 @@
 		var context = canvas.getContext('2d');
 
 		var paddleX = 200;
-		var paddleY = 460;
+		var paddleY = 450;
 
-		var paddleWidth = 100;
-		var paddleHeight = 15;
+		var paddleWidth = 90;
+		var paddleHeight = 60;
+		
 
 		var paddleDeltaX = 0;
 		var paddleDeltaY = 0;
@@ -28,9 +29,10 @@
 
 		// drawPaddle();
 
-		var ballX = 300;
+		var ballX = 150;
 		var ballY = 300;
-		var ballRadius = 10;
+		var ballRadius = 30;
+	    
 
 		function drawBall() {
 			// Context.beginPath when you draw primitive shapes
@@ -39,20 +41,22 @@
 			// Draw arc at center ballX, ballY with radius ballRadius, 
 			// From 0 to 2xPI radians (full circle)
 			context.arc(ballX, ballY, ballRadius, 0, Math.PI * 2, true);
-
+            context.fillStyle="#33FF33";
+          
 			// Fill up the path that you just drew
 			context.fill();
+          
 		}
 
 		// drawBall();
 
 		var bricksPerRow = 8;
-		var brickHeight = 20;
+		var brickHeight = 25;
 		var brickWidth = canvas.width / bricksPerRow;
 
 		// Brick Layout: 1 is orange, 2 is green, 3 is gray, 0 means no brick 
 		var bricks = [ [ 1, 1, 1, 1, 1, 1, 1, 2 ], [ 1, 1, 3, 1, 0, 1, 1, 1 ],
-				[ 2, 1, 2, 1, 2, 1, 0, 1 ], [ 1, 2, 1, 1, 0, 3, 1, 1 ] ];
+				[ 2, 1, 2, 3, 2, 1, 0, 1 ], [ 1, 2, 3, 1, 0, 3, 1, 1 ] ];
 
 		// iterate through the bricks array and draw each brick using drawBrick()
 		function createBricks() {
@@ -67,13 +71,13 @@
 		function drawBrick(x, y, type) {
 			switch (type) { // if brick is still visible; three colors for three types of bricks
 			case 1:
-				context.fillStyle = 'orange';
+				context.fillStyle = 'blue';
 				break;
 			case 2:
-				context.fillStyle = 'rgb(100,200,100)';
+				context.fillStyle = 'yellow';
 				break;
 			case 3:
-				context.fillStyle = 'rgba(50,100,50,.5)';
+				context.fillStyle = 'pink';
 				break;
 			default:
 				context.clearRect(x * brickWidth, y * brickHeight, brickWidth,
@@ -87,7 +91,7 @@
 						brickHeight);
 				// Also draw blackish border around the brick
 				context.strokeRect(x * brickWidth + 1, y * brickHeight + 1,
-						brickWidth - 2, brickHeight - 2);
+						brickWidth - 1, brickHeight - 1);
 			}
 		}
 
@@ -97,7 +101,7 @@
 
 		function displayScoreBoard() {
 			//Set the text font and color
-			context.fillStyle = 'rgb(50,100,50)';
+			context.fillStyle = 'red',
 			context.font = "20px Times New Roman";
 
 			//Clear the bottom 30 pixels of the canvas
@@ -256,7 +260,7 @@
 		}
 		
         var paddleDeltaX;
-        var paddleSpeedX = 10;
+        var paddleSpeedX = 30;
 
         function movePaddle(){
             if (paddleMove == 'LEFT'){
@@ -266,6 +270,7 @@
             } else {
                 paddleDeltaX = 0;
             }
+             
             // If paddle reaches the ends, then don't let it move 
             if (paddleX + paddleDeltaX < 0 || paddleX + paddleDeltaX +paddleWidth >canvas.width){
                 paddleDeltaX = 0; 
@@ -275,14 +280,16 @@
 
         var gameLoop;
         var paddleMove;
+        var paddleUP
         function startGame(){
             ballDeltaY = -4;
             ballDeltaX = -2;
             paddleMove = 'NONE';
+            paddleUP ='S1';
             paddleDeltaX = 0;
 
             // call the animate() function every 200ms until clearInterval(gameLoop) is called
-            gameLoop = setInterval(animate,20);
+            gameLoop = setInterval(animate, 8);
 
             // Start Tracking Keystokes
             $(document).keydown(function(evt) {
@@ -291,7 +298,10 @@
                 } else if (evt.keyCode == 37){
                     paddleMove = 'LEFT';
                 }
-            });         
+            
+            }); 
+        
+       
 
             $(document).keyup(function(evt) {
                 if (evt.keyCode == 39) {
@@ -299,7 +309,11 @@
                 } else if (evt.keyCode == 37){
                     paddleMove = 'NONE';
                 }
-            }); 
+                  }); 
+           
+         
+             
+           
         }
 
 		function endGame() {
